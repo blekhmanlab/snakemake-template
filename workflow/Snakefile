@@ -1,0 +1,38 @@
+configfile: "config/config.yaml"
+
+rule all:
+    input: # here's where you should list the FINAL files you're working toward
+        'ASVs.fa', 'ASVs_counts.tsv'
+
+rule rulea:
+    input:
+        'example_input.txt'
+    output:
+        'example_output.txt'
+    container:
+        'docker://ncbi/sra-tools:3.0.1'
+    threads: 1
+    resources:
+        mem_mb=500,
+        runtime=480
+    shell:
+        "cat {input} > {output}"
+
+rule ruleb:
+    input:
+        fastq: '{sample}.sra', # you can name inputs and outputs
+        other_one: 'example_output.txt'
+    output:
+        'ASVs.fa', 'ASVs_counts.tsv'
+    container:
+        'docker://ncbi/sra-tools:3.0.1'
+    threads: 4
+    resources:
+        mem_mb=2000,
+        runtime=480
+    shell: # you can use multi-line commands if you need to
+        """
+            fasterq-dump --skip-technical --mem 1GB --threads 4 --split-files -O fastq/ {wildcards.sample}
+            cd fastq
+            [ ! -f {wildcards.sample}_1.fastq ] || mv {wildcards.sample}_1.fastq {wildcards.sample}.fastq
+        """

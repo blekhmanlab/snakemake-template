@@ -1,0 +1,3 @@
+# This file would be a good place for variables that users can
+# (or MUST) set to specify file locations, non-default options, etc
+example_val: '/scratch.global/asdf/abc123/'
