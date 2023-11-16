@@ -24,7 +24,7 @@ if [ ! -f "./venv/bin/snakemake" ]; then
 fi
 
 # run snakemake
-snakemake --use-singularity --jobs 25 --slurm --default-resources slurm_account=blekhman slurm_partition=blekhman
+snakemake --jobs 25 --slurm --default-resources slurm_account=blekhman slurm_partition=blekhman
 
 # to submit this job:
 # sbatch --job-name=next -o nextone.log run_snakemake.slurm
